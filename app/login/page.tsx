@@ -29,8 +29,7 @@ export default async function LoginPage() {
                                     className="h-24 w-auto max-w-[60%] object-contain"
                                 />
                             </div>
-                            <CardTitle className="text-center">Sign In</CardTitle>
-                            <CardDescription className="text-center">Enter the preset password to access the dashboard</CardDescription>
+                            <CardDescription className="text-center">Enter the email and password to access the dashboard</CardDescription>
                         </CardHeader>
                         <CardContent>
                             <form action={signIn} className="space-y-4">
