@@ -1,8 +1,8 @@
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { redirect } from "next/navigation";
 import { getSession } from "@/app/actions/auth";
 import { getAllowedTokens, saveAllowedTokens } from "@/app/actions/settings";
-import { redirect } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default async function SettingsPage() {
   const session = await getSession();
@@ -26,13 +26,17 @@ export default async function SettingsPage() {
           <CardHeader>
             <CardTitle>Allowed Tokens</CardTitle>
             <p className="text-sm text-gray-600">
-              Configure which tokens are allowed to access the API. Enter one token per line.
+              Configure which tokens are allowed to access the API. Enter one
+              token per line.
             </p>
           </CardHeader>
           <CardContent>
             <form action={saveAllowedTokens} className="space-y-4">
               <div>
-                <label htmlFor="tokens" className="block text-sm font-medium text-gray-700 mb-2">
+                <label
+                  htmlFor="tokens"
+                  className="block text-sm font-medium text-gray-700 mb-2"
+                >
                   Tokens
                 </label>
                 <textarea

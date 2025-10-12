@@ -1,6 +1,6 @@
 import "./globals.css";
-import { Cantarell } from "@/lib/fonts";
 import { type ReactNode, Suspense } from "react";
+import { Cantarell } from "@/lib/fonts";
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
