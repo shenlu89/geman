@@ -7,7 +7,7 @@ const NotFound: NextPage = () => {
     <div className="flex h-full items-center justify-center space-y-4 flex-col">
       <Logo size={120} />
       <h1 className="font-extrabold text-6xl tracking-tight mb-4">404</h1>
-      <div className="text-slate-600 text-lg">
+      <div className="text-gray-600 text-lg">
         <span>
           Page Not Found. Go back to{" "}
           <Link
