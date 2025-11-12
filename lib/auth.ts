@@ -1,16 +1,13 @@
-import { betterAuth } from "better-auth";
+import { betterAuth, APIError } from "better-auth";
+import { createAuthMiddleware } from "better-auth/api";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "@/db"; // your drizzle instance
 import { account, session, user, verification } from "@/db/schema";
 import { nextCookies } from "better-auth/next-js";
 import { headers } from "next/headers";
 
-const rows = await db.select().from(user).limit(1);
-const exists = rows.length > 0;
-
 export const auth = betterAuth({
   secret: process.env.BETTER_AUTH_SECRET!,
-  url: process.env.BETTER_AUTH_URL || "http://localhost:3000",
   database: drizzleAdapter(
     db,
     {
@@ -26,30 +23,26 @@ export const auth = betterAuth({
       // Optional: beforeDelete, afterDelete callbacks
     }
   },
-  // Extend user object (Better Auth configuration)
-  // user: {
-  //   additionalFields: {
-  //     role: {
-  //       type: "string",
-  //       defaultValue: "admin",
-  //     },
-  //   },
-  // },
-  // enable only email/password for now
   emailAndPassword: {
     enabled: true,
-    disableSignUp: exists,
     autoSignIn: true,
   },
-  // // optional: cookie/session options
-  // session: {
-  //   // default settings; adapter will manage session table
-  //   freshAge: 60 * 60 * 24 * 30, // 30 days
-  // },
   plugins: [
     // This plugin is essential for server actions to set cookies
     nextCookies(),
   ],
+  hooks: {
+    before: createAuthMiddleware(async (ctx) => {
+      if (ctx.path === "/sign-up/email") {
+        const users = await db.select().from(user);
+        if (users.length > 0) {
+          throw new APIError("BAD_REQUEST", {
+            message: "The account already exists. Please login.",
+          });
+        }
+      }
+    }),
+  },
 });
 
 export const getServerSession = async () => {
