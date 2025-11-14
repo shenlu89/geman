@@ -161,7 +161,7 @@ async function proxyRequest(request: NextRequest, model: string) {
 // ---------------------------
 export async function POST(
   request: NextRequest,
-  context: { params: Promise<{ model: string | string[] | undefined }> },
+  { params }: { params: { model: string } },
 ) {
   // New: authentication - check access token before all operations
   const clientToken = request.nextUrl.searchParams.get("key");
@@ -176,11 +176,7 @@ export async function POST(
 
   // After token validation, extract dynamic model parameter
   // For example, from "gemini-2.0-flash:generateContent" extract "gemini-2.0-flash"
-  const routeParams = await context.params;
-  const rawModel = Array.isArray(routeParams.model)
-    ? routeParams.model[0]
-    : routeParams.model;
-  const modelName = typeof rawModel === "string" ? rawModel.split(":")[0] : "";
+  const modelName = params.model.split(":")[0];
   if (!modelName) {
     return NextResponse.json(
       { error: "Invalid model format in URL." },
