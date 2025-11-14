@@ -46,7 +46,7 @@ export async function addApiKey(apiKey: string) {
  */
 export async function getAllApiKeys(): Promise<ApiKey[]> {
   try {
-    const rows = await db
+    const rows = await (db as any)
       .select({
         id: apiKeys.id,
         apiKey: apiKeys.apiKey,
@@ -112,7 +112,7 @@ export async function getNextApiKey(): Promise<{
   id: number;
 } | null> {
   try {
-    return await db.transaction(async (tx: any) => {
+    return await (db as any).transaction(async (tx: any) => {
       // Find the least recently used healthy and active key
       const availableKeys = await tx
         .select({
@@ -170,7 +170,7 @@ export async function recordApiSuccess(keyId: number) {
  */
 export async function recordApiFailure(keyId: number, maxFailures = 3) {
   try {
-    await db.transaction(async (tx: any) => {
+    await (db as any).transaction(async (tx: any) => {
       // Get current failure count
       const [currentKey] = await tx
         .select({ failureCount: apiKeys.failureCount })
@@ -258,7 +258,7 @@ export async function getApiKeyCallStats(): Promise<
   }>
 > {
   try {
-    const rows = await db
+    const rows = await (db as any)
       .select({
         id: apiKeys.id,
         callCount: sql<number>`count(${apiKeyCalls.id})`,
