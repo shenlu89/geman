@@ -15,7 +15,6 @@ export async function GET() {
 
     const keyDetails = keys.map((key) => ({
       id: key.id,
-      name: key.name,
       isActive: key.isActive,
       isHealthy: key.isHealthy,
       failureCount: key.failureCount,
