@@ -19,17 +19,17 @@ const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-1.5-flash";
 // ---------------------------
 // ✅ Core Proxy Logic
 // ---------------------------
-export async function proxyRequest(request: NextRequest, model?: string) {
+async function proxyRequest(request: NextRequest, model?: string) {
   let selectedKeyId: number | null = null;
 
   // Use local HTTP proxy only in development
   const dispatcher =
     process.env.NODE_ENV === "development"
       ? new ProxyAgent(
-          process.env.HTTP_PROXY ??
-            process.env.HTTPS_PROXY ??
-            "http://127.0.0.1:7890",
-        )
+        process.env.HTTP_PROXY ??
+        process.env.HTTPS_PROXY ??
+        "http://127.0.0.1:7890",
+      )
       : undefined;
 
   try {
